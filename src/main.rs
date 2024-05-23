@@ -1,5 +1,6 @@
 mod cli;
 mod aur;
+mod ascii_art;
 mod pacman;
 mod cache;
 
