@@ -4,8 +4,6 @@ mod pacman;
 
 use cli::build_cli;
 
-use aur::search_aur;
-
 fn main() {
     let matches = build_cli().get_matches();
 

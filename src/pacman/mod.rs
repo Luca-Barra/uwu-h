@@ -9,6 +9,7 @@ pub fn is_pacman_available() -> bool {
         .output()
         .is_ok()
 }
+
 pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     let output = Command::new("sudo")
@@ -24,7 +25,6 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
         println!("Package {} installato con successo.", Color::Blue.bold().paint(package));
         Ok(())
     } else {
-        eprintln!("Errore: {}", String::from_utf8_lossy(&output.stderr));
         Err(format!("Errore durante l'installazione: {}", package).into())
     }
 }

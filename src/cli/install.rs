@@ -6,7 +6,7 @@ pub fn install_command(package: &str) {
 
         }
         Err(err) => {
-            eprintln!("Error installing package: {}", err);
+
         }
     }
 }
