@@ -1,10 +1,12 @@
 mod cli;
 mod aur;
 mod pacman;
+mod cache;
 
 use cli::build_cli;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let matches = build_cli().get_matches();
 
     if !pacman::is_pacman_available() {
@@ -19,7 +21,11 @@ fn main() {
         },
         Some(("install", sub_m)) => {
             let package = sub_m.get_one::<String>("package").unwrap();
-            cli::install::install_command(package);
+            cli::install::install_command(package).await;
+        },
+        Some(("remove", sub_m)) => {
+            let package = sub_m.get_one::<String>("package").unwrap();
+            cli::remove::remove_command(package);
         },
         _ => {
             println!("Unknown command");

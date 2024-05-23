@@ -1,8 +1,8 @@
-
+#![allow(non_snake_case)]
 use reqwest::blocking::get;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AurPackage {
     pub(crate) Name: String,
     pub(crate) Version: String,
@@ -10,7 +10,7 @@ pub struct AurPackage {
     pub(crate) URLPath: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AurResponse {
     pub(crate) results: Vec<AurPackage>,
 }

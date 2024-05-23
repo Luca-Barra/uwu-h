@@ -1,12 +1,13 @@
+
 use crate::pacman::install_package;
 
-pub fn install_command(package: &str) {
+pub async fn install_command(package: &str) {
     match install_package(package) {
-        Ok(output) => {
+        Ok(..) => {
 
         }
         Err(err) => {
-
+            eprintln!("Failed to install package: {}", err);
         }
     }
 }

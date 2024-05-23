@@ -1,5 +1,6 @@
 pub(crate) mod install;
 pub(crate) mod search;
+pub(crate) mod remove;
 
 use clap::{Arg, Command};
 
@@ -23,6 +24,15 @@ pub fn build_cli() -> Command<'static,> {
                 .arg(
                     Arg::new("package")
                         .help("The package to install")
+                        .required(true),
+                ),
+        )
+        .subcommand(
+            Command::new("remove")
+                .about("Remove a package")
+                .arg(
+                    Arg::new("package")
+                        .help("The package to remove")
                         .required(true),
                 ),
         )

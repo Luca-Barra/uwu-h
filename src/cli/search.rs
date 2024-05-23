@@ -1,7 +1,6 @@
 use crate::aur::search_aur;
 
 use ansi_term::Color;
-use ansi_term::Style;
 
 pub fn search_command(query: &str) {
     match search_aur(query) {
