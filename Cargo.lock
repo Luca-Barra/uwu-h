@@ -1223,8 +1223,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "uwu"
-version = "0.1.0"
+name = "uwu-h"
+version = "1.0.1"
 dependencies = [
  "ansi_term",
  "clap",

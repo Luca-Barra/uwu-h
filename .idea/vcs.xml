@@ -3,9 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/crunchyroll" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/scenebuilder" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/uwu-h" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/webex" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/zip" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fireshot-git" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/flameshot-git" vcs="Git" />
   </component>
 </project>
