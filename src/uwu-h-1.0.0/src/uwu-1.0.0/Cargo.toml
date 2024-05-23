@@ -1,6 +1,6 @@
 [package]
-name = "uwu-h"
-version = "1.0.0"
+name = "uwu"
+version = "0.1.0"
 authors =  ["Luna"]
 edition = "2021"
 
