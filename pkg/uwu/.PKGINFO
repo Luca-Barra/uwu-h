@@ -6,7 +6,7 @@ xdata = pkgtype=pkg
 pkgver = 1.0.0-1
 pkgdesc = A basic AUR helper written in Rust.
 url = https://github.com/Luca-Barra/uwu
-builddate = 1716479797
+builddate = 1716483290
 packager = Unknown Packager
 size = 3675944
 arch = x86_64
