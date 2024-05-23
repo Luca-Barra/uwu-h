@@ -7,7 +7,7 @@ arch=('x86_64')
 url="https://github.com/Luca-Barra/uwu"
 license=('MIT')
 depends=('rust' 'cargo')
-source=("$pkgname-$pkgver.tar.gz::https://yourprojectsource.example.com/archive/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::https://github.com/Luca-Barra/uwu/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 
 build() {
