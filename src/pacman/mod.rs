@@ -1,4 +1,7 @@
-use std::process::{Command, Output};
+use std::io;
+use std::io::Write;
+use std::process::{Command, Output, Stdio};
+use ansi_term::Color;
 
 pub fn is_pacman_available() -> bool {
     Command::new("pacman")
@@ -6,17 +9,23 @@ pub fn is_pacman_available() -> bool {
         .output()
         .is_ok()
 }
+pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
 
-pub fn install_package(package: &str) -> Result<Output, Box<dyn std::error::Error>> {
     let output = Command::new("sudo")
         .arg("pacman")
         .arg("-S")
         .arg(package)
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
         .output()?;
-    println!("Output: {}", String::from_utf8_lossy(&output.stdout));
+
     if output.status.success() {
-        Ok(output)
+        println!("Package {} installato con successo.", Color::Blue.bold().paint(package));
+        Ok(())
     } else {
-        Err(format!("Failed to install package: {}", package).into())
+        eprintln!("Errore: {}", String::from_utf8_lossy(&output.stderr));
+        Err(format!("Errore durante l'installazione: {}", package).into())
     }
 }
+
