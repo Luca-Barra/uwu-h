@@ -5,7 +5,7 @@ pub(crate) mod remove;
 use clap::{Arg, Command};
 
 pub fn build_cli() -> Command<'static,> {
-    Command::new("uwu")
+    Command::new("uwu-h")
         .version("1.0")
         .author("luna")
         .about("AUR Helper written in Rust")

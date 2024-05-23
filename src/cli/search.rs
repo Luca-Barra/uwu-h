@@ -2,8 +2,8 @@ use crate::aur::search_aur;
 
 use ansi_term::Color;
 
-pub fn search_command(query: &str) {
-    match search_aur(query) {
+pub async fn search_command(query: &str) {
+    match search_aur(query).await {
         Ok(response) => {
             for package in response.results {
                 println!("{} - {}", Color::Blue.bold().paint(package.Name), Color::Green.paint(package.Version));

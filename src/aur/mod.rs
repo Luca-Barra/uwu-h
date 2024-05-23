@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use reqwest::blocking::get;
+use reqwest::get;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -17,8 +17,8 @@ pub struct AurResponse {
 
 const AUR_BASE_URL: &str = "https://aur.archlinux.org/rpc/?v=5&type=search&arg=";
 
-pub fn search_aur(query: &str) -> Result<AurResponse, Box<dyn std::error::Error>> {
+pub async  fn search_aur(query: &str) -> Result<AurResponse, Box<dyn std::error::Error>> {
     let url = format!("{}{}", AUR_BASE_URL, query);
-    let response: AurResponse = get(&url)?.json()?;
+    let response: AurResponse = get(&url).await?.json().await?;
     Ok(response)
 }

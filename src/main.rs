@@ -17,7 +17,7 @@ async fn main() {
     match matches.subcommand() {
         Some(("search", sub_m)) => {
             let query = sub_m.get_one::<String>("query").unwrap();
-            cli::search::search_command(query);
+            cli::search::search_command(query).await;
         },
         Some(("install", sub_m)) => {
             let package = sub_m.get_one::<String>("package").unwrap();
