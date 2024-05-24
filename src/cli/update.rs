@@ -1,5 +1,5 @@
 use std::process::{Command, Stdio};
-use ansi_term::Color;
+use colored::*;
 use crate::ascii_art;
 
 pub(crate) async fn update_command() {
@@ -14,9 +14,15 @@ pub(crate) async fn update_command() {
     match output {
         Ok(output) => {
             if output.status.success() {
-                println!("{}", Color::Blue.paint("Aggiornamento completato"));
-                println!("{}", Color::Green.paint(ascii_art::uwu()));
-            } else {
+                println!("{}", "Aggiornamento completato".blue());
+                let ascii_art = ascii_art::uwu();
+                let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+                for (i, line) in ascii_art.lines().enumerate() {
+                    let color = colors[i % colors.len()];
+                    println!("{}", line.color(color));
+                }
+            }
+            else {
                 eprintln!("Error updating system");
                 ascii_art::notuwu();
             }

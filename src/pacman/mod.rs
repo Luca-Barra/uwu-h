@@ -1,11 +1,13 @@
 use std::fs;
 use std::process::{Command, Stdio};
 use ansi_term::Color;
+use colored::Colorize;
 use dirs::home_dir;
 use fs_extra::dir::{copy, CopyOptions};
 use crate::ascii_art;
 use crate::diff::show_diff;
 use dialoguer::Confirm;
+use crate::aur::search_aur;
 
 pub fn is_pacman_available() -> bool {
     Command::new("pacman")
@@ -13,7 +15,8 @@ pub fn is_pacman_available() -> bool {
         .output()
         .is_ok()
 }
-pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
+
+pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
     let output = Command::new("sudo")
         .arg("pacman")
         .arg("-S")
@@ -29,6 +32,11 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
                 println!("Package {} installato con successo", Color::Blue.bold().paint(package));
                 Ok(())
             } else {
+                let aur_response = search_aur(package).await?;
+                if aur_response.results.is_empty() {
+                    println!("{}", Color::Red.paint(ascii_art::notuwu()));
+                    return Err(format!("Package {} non trovato", package).into());
+                }
 
                 let show_diffs = Confirm::new()
                     .with_prompt("Vuoi mostrare le differenze?")
@@ -81,7 +89,7 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
                         .output()?;
 
                     if !output.status.success() {
-                        println!("{}", ascii_art::notuwu());
+                        println!("{}", Color::Red.paint(ascii_art::notuwu()));
                         return Err(format!("Error cloning AUR package: {}", package).into());
                     }
 
@@ -95,13 +103,18 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
 
                     if output.status.success() {
                         println!("Package {} installato con successo", Color::Blue.bold().paint(package));
-                        println!("{}", ascii_art::uwu());
+
+                        let ascii_art = ascii_art::uwu();
+                        let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+                        for (i, line) in ascii_art.lines().enumerate() {
+                            let color = colors[i % colors.len()];
+                            println!("{}", line.color(color));
+                        }
+
                         let cache_directory = uwu_directory.join(".cache").join(package_name);
                         fs::create_dir_all(&cache_directory)?;
                         let mut options = CopyOptions::new();
                         options.overwrite = true;
-
-                        ascii_art::uwu();
 
                         if show_diffs {
                             copy(&build_dir, &cache_directory, &options)?;
@@ -112,7 +125,7 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
                             Ok(())
                         }
                     } else {
-                        println!("{}", ascii_art::notuwu());
+                        println!("{}", Color::Red.paint(ascii_art::notuwu()));
                         Err(format!("Error building/installing AUR package: {}", Color::Red.paint(package)).into())
                     }
                 }
@@ -120,7 +133,7 @@ pub fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> 
             }
         },
         Err(_) => {
-            println!("{}", ascii_art::notuwu());
+            println!("{}", Color::Red.paint(ascii_art::notuwu()));
             Err(format!("Failed to run command for package: {}", package).into())
         }
     }
@@ -145,10 +158,17 @@ pub fn remove_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
             fs::remove_dir_all(package_directory)?;
         }
         println!("Package {} rimosso con successo.", Color::Blue.bold().paint(package));
-        println!("{}", ascii_art::uwu());
+
+        let ascii_art = ascii_art::uwu();
+        let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+        for (i, line) in ascii_art.lines().enumerate() {
+            let color = colors[i % colors.len()];
+            println!("{}", line.color(color));
+        }
+
         Ok(())
     } else {
-        println!("{}", ascii_art::notuwu());
+        println!("{}", Color::Red.paint(ascii_art::notuwu()));
         Err(format!("Errore durante la rimozione: {}", package).into())
     }
 }
