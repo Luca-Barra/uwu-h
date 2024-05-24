@@ -2,12 +2,13 @@ pub(crate) mod install;
 pub(crate) mod search;
 pub(crate) mod remove;
 pub(crate) mod update;
+pub(crate) mod stats;
 
 use clap::{Arg, Command};
 
 pub fn build_cli() -> Command<'static,> {
     Command::new("uwu-h")
-        .version("1.0")
+        .version("1.2")
         .author("luna")
         .about("AUR Helper written in Rust")
         .subcommand(
@@ -40,5 +41,9 @@ pub fn build_cli() -> Command<'static,> {
         .subcommand(
             Command::new("update")
                 .about("Update all packages")
+        )
+        .subcommand(
+            Command::new("stats")
+                .about("Show statistics about installed packages")
         )
 }

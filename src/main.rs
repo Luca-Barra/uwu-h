@@ -32,6 +32,9 @@ async fn main() {
         Some(("update", _)) => {
             cli::update::update_command().await;
         },
+        Some(("stats", _)) => {
+            cli::stats::stats_command().await;
+        },
         _ => {
             println!("Unknown command");
         }
