@@ -3,6 +3,7 @@ mod aur;
 mod ascii_art;
 mod pacman;
 mod cache;
+mod diff;
 
 use cli::build_cli;
 
@@ -27,6 +28,9 @@ async fn main() {
         Some(("remove", sub_m)) => {
             let package = sub_m.get_one::<String>("package").unwrap();
             cli::remove::remove_command(package);
+        },
+        Some(("update", _)) => {
+            cli::update::update_command().await;
         },
         _ => {
             println!("Unknown command");

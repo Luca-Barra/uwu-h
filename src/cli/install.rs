@@ -6,8 +6,8 @@ pub async fn install_command(package: &str) {
         Ok(..) => {
 
         }
-        Err(err) => {
-            eprintln!("Failed to install package: {}", err);
+        Err(..) => {
+
         }
     }
 }
