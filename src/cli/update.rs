@@ -1,6 +1,6 @@
-use std::process::{Command, Stdio};
-use colored::*;
 use crate::ascii_art;
+use colored::*;
+use std::process::{Command, Stdio};
 
 pub(crate) async fn update_command() {
     let output = Command::new("sudo")
@@ -14,19 +14,18 @@ pub(crate) async fn update_command() {
     match output {
         Ok(output) => {
             if output.status.success() {
-                println!("{}", "Aggiornamento completato".blue());
+                println!("{}", "Update Completed :3".blue());
                 let ascii_art = ascii_art::uwu();
-                let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+                let colors = ["red", "yellow", "green", "cyan", "blue", "magenta"];
                 for (i, line) in ascii_art.lines().enumerate() {
                     let color = colors[i % colors.len()];
                     println!("{}", line.color(color));
                 }
-            }
-            else {
+            } else {
                 eprintln!("Error updating system");
                 ascii_art::notuwu();
             }
-        },
+        }
         Err(e) => {
             eprintln!("Error updating system: {}", e);
         }

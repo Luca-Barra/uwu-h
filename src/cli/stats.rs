@@ -1,32 +1,40 @@
-use std::error::Error;
-use std::process::Command;
+use crate::ascii_art;
 use ansi_term::Color;
 use colored::Colorize;
-use crate::ascii_art;
+use std::error::Error;
+use std::process::Command;
 
 pub(crate) async fn stats_command() {
     let pacman = "pacman";
     let info = collect(pacman).await.unwrap();
     println!();
-    println!("Packages totali: {}", Color::Blue.paint(info.total_packages.to_string()));
+    println!(
+        "Packages totali: {}",
+        Color::Blue.paint(info.total_packages.to_string())
+    );
     println!();
     let total_size_gib = info.total_size as f64 / (1024.0 * 1024.0 * 1024.0);
-    println!("Dimensioni totali: {} {}", Color::Blue.paint(total_size_gib.to_string()), Color::Red.paint("GiB".to_string()));
+    println!(
+        "Dimensioni totali: {} {}",
+        Color::Blue.paint(total_size_gib.to_string()),
+        Color::Red.paint("GiB".to_string())
+    );
     println!();
     println!("Top 10 packages:");
     for (size, name) in info.max_packages.iter().take(10) {
         let size_gib = *size as f64 / (1024.0 * 1024.0 * 1024.0);
         println!();
-        println!("--- {}{} {} {}",
-                 Color::Green.paint(name.to_string()),
-                 Color::Red.paint(":".to_string()),
-                 Color::Blue.paint(size_gib.to_string()),
-                 Color::Red.paint("GiB".to_string())
+        println!(
+            "--- {}{} {} {}",
+            Color::Green.paint(name.to_string()),
+            Color::Red.paint(":".to_string()),
+            Color::Blue.paint(size_gib.to_string()),
+            Color::Red.paint("GiB".to_string())
         );
     }
 
     let ascii_art = ascii_art::uwu();
-    let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+    let colors = ["red", "yellow", "green", "cyan", "blue", "magenta"];
     for (i, line) in ascii_art.lines().enumerate() {
         let color = colors[i % colors.len()];
         println!("{}", line.color(color));
@@ -53,11 +61,11 @@ async fn collect(pacman: &str) -> Result<Info, Box<dyn Error>> {
     let mut package_name = String::new();
 
     for line in output.lines() {
-        if line.starts_with("Nome") {
+        if line.starts_with("Name") {
             package_name = line.split(':').last().unwrap().trim().to_string();
             total_packages += 1;
         }
-        if line.starts_with("Spazio richiesto") {
+        if line.starts_with("Installed Size") {
             let size_str = match line.split(':').last() {
                 Some(size_str) if !size_str.trim().is_empty() => size_str.trim(),
                 _ => {

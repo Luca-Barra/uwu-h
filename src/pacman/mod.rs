@@ -1,19 +1,16 @@
-use std::fs;
-use std::process::{Command, Stdio};
+use crate::ascii_art;
+use crate::aur::search_aur;
+use crate::diff::show_diff;
 use ansi_term::Color;
 use colored::Colorize;
+use dialoguer::Confirm;
 use dirs::home_dir;
 use fs_extra::dir::{copy, CopyOptions};
-use crate::ascii_art;
-use crate::diff::show_diff;
-use dialoguer::Confirm;
-use crate::aur::search_aur;
+use std::fs;
+use std::process::{Command, Stdio};
 
 pub fn is_pacman_available() -> bool {
-    Command::new("pacman")
-        .arg("--version")
-        .output()
-        .is_ok()
+    Command::new("pacman").arg("--version").output().is_ok()
 }
 
 pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
@@ -29,7 +26,10 @@ pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Er
     match output {
         Ok(output) => {
             if output.status.success() {
-                println!("Package {} installato con successo", Color::Blue.bold().paint(package));
+                println!(
+                    "Package {} installato con successo",
+                    Color::Blue.bold().paint(package)
+                );
                 Ok(())
             } else {
                 let aur_response = search_aur(package).await?;
@@ -72,10 +72,16 @@ pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Er
 
                     if show_diffs {
                         copy(&build_dir, &cache_directory, &options)?;
-                        Ok(show_diff(&cache_directory.to_string_lossy(), &build_dir.to_string_lossy()))
+                        Ok(show_diff(
+                            &cache_directory.to_string_lossy(),
+                            &build_dir.to_string_lossy(),
+                        ))
                     } else {
                         copy(&build_dir, &cache_directory, &options)?;
-                        println!("Package {} già installato, aggiornato con successo", Color::Blue.bold().paint(package));
+                        println!(
+                            "Package {} già installato, aggiornato con successo",
+                            Color::Blue.bold().paint(package)
+                        );
                         Ok(())
                     }
                 } else {
@@ -102,10 +108,13 @@ pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Er
                         .output()?;
 
                     if output.status.success() {
-                        println!("Package {} installato con successo", Color::Blue.bold().paint(package));
+                        println!(
+                            "Package {} installato con successo",
+                            Color::Blue.bold().paint(package)
+                        );
 
                         let ascii_art = ascii_art::uwu();
-                        let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+                        let colors = ["red", "yellow", "green", "cyan", "blue", "magenta"];
                         for (i, line) in ascii_art.lines().enumerate() {
                             let color = colors[i % colors.len()];
                             println!("{}", line.color(color));
@@ -118,20 +127,29 @@ pub async fn install_package(package: &str) -> Result<(), Box<dyn std::error::Er
 
                         if show_diffs {
                             copy(&build_dir, &cache_directory, &options)?;
-                            Ok(show_diff(&cache_directory.to_string_lossy(), &build_dir.to_string_lossy()))
+                            Ok(show_diff(
+                                &cache_directory.to_string_lossy(),
+                                &build_dir.to_string_lossy(),
+                            ))
                         } else {
                             copy(&build_dir, &cache_directory, &options)?;
-                            println!("Package {} già installato, aggiornato con successo", Color::Blue.bold().paint(package));
+                            println!(
+                                "Package {} già installato, aggiornato con successo",
+                                Color::Blue.bold().paint(package)
+                            );
                             Ok(())
                         }
                     } else {
                         println!("{}", Color::Red.paint(ascii_art::notuwu()));
-                        Err(format!("Error building/installing AUR package: {}", Color::Red.paint(package)).into())
+                        Err(format!(
+                            "Error building/installing AUR package: {}",
+                            Color::Red.paint(package)
+                        )
+                        .into())
                     }
                 }
-
             }
-        },
+        }
         Err(_) => {
             println!("{}", Color::Red.paint(ascii_art::notuwu()));
             Err(format!("Failed to run command for package: {}", package).into())
@@ -157,10 +175,13 @@ pub fn remove_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
         if package_directory.exists() {
             fs::remove_dir_all(package_directory)?;
         }
-        println!("Package {} rimosso con successo.", Color::Blue.bold().paint(package));
+        println!(
+            "Package {} rimosso con successo.",
+            Color::Blue.bold().paint(package)
+        );
 
         let ascii_art = ascii_art::uwu();
-        let colors = vec!["red", "yellow", "green", "cyan", "blue", "magenta"];
+        let colors = ["red", "yellow", "green", "cyan", "blue", "magenta"];
         for (i, line) in ascii_art.lines().enumerate() {
             let color = colors[i % colors.len()];
             println!("{}", line.color(color));
@@ -172,4 +193,3 @@ pub fn remove_package(package: &str) -> Result<(), Box<dyn std::error::Error>> {
         Err(format!("Errore durante la rimozione: {}", package).into())
     }
 }
-
